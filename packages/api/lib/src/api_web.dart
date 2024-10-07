@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'api_platform_interface.dart';
 import 'models.dart';
@@ -10,9 +9,9 @@ import 'models.dart';
 class ApiWeb extends ApiPlatform {
   ApiWeb();
 
-  static void registerWith(Registrar registrar) {
-    ApiPlatform.instance = ApiWeb();
-  }
+  // static void registerWith(Registrar registrar) {
+  //   ApiPlatform.instance = ApiWeb();
+  // }
 
   @override
   late final Client client = Client(baseUrl);

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:api/src/api_web.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -15,7 +16,7 @@ abstract class ApiPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static ApiPlatform _instance = MethodChannelApi();
+  static ApiPlatform _instance = ApiWeb();
 
   static ApiPlatform get instance => _instance;
 
