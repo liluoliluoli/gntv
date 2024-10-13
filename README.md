@@ -1,15 +1,5 @@
-# Ghosten Player
-
-<img src="assets/images/logo.png" width="200" alt="Logo"/>
-
-<span style="font-size: 2em">📽️</span> Available for **Android Phone** • **Android TV** • **Windows[^1]** • **Mac[^1]
-** !
-
-[下载](https://github.com/GhostenEditor/Ghosten-Player/releases/latest)
-
+# GNTV
 一款同时适配Android TV和Android Phone的视频播放器，同时支持云播放(阿里云盘和Webdav)和本地播放，支持刮削影视的元信息，界面简洁纯净，操作简单
-
-[^1]: 开发中
 
 ## 预览 [^2]
 
@@ -296,18 +286,6 @@ Todo
 </table>
 
 ## 版本适配
+`
+Android 6+`
 
-Android 6+
-
-## Todos
-
-- [ ] 音乐播放器
-- [ ] 保存媒体信息至文件(nfo)
-- [ ] 桌面端(Developing)
-- [ ] 应用串联
-
-## 声明
-
-本项目仅作为个人学习使用
-
-本项目不提供任何的内容资源，若出现任何内容侵权行为皆与本项目开发人员无关
