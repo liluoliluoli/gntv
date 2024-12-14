@@ -11,7 +11,7 @@ extension FromMedia on ExPlaylistItem {
       sourceType: episode.downloaded ? PlaylistItemSourceType.local : PlaylistItemSourceType.other,
       title: episode.displayTitle(),
       description: '${episode.seriesTitle} S${episode.season} E${episode.episode}${episode.airDate == null ? '' : ' - ${episode.airDate?.format()}'}',
-      url: Uri.parse(episode.url!).replace(scheme: Api.baseUrl.scheme, host: Api.baseUrl.host, port: Api.baseUrl.port),
+      url: Uri.parse(episode.url!),
       poster: episode.poster,
       subtitles: episode.subtitles
           .map((e) => Subtitle(

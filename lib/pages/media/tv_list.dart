@@ -89,7 +89,7 @@ class _TVListPageState extends State<TVListPage> with MediaListMixin, NeedUpdate
                                             final season = await Api.tvSeasonQueryById(item.seasonId);
                                             final playlist = season.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList();
                                             if (!context.mounted) return;
-                                            await toPlayer(context, playlist, id: item.id, theme: item.themeColor, playerType: PlayerType.tv);
+                                            await toPlayer(context, playlist, id: item.id, playerType: PlayerType.tv);
                                             setState(() {});
                                           });
                                     },

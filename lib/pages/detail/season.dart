@@ -21,10 +21,9 @@ import 'utils/tmdb_uri.dart';
 
 class SeasonDetail extends StatefulWidget {
   final int id;
-  final Scrapper scrapper;
   final TVSeason? initialData;
 
-  const SeasonDetail({super.key, required this.id, this.initialData, required this.scrapper});
+  const SeasonDetail({super.key, required this.id, this.initialData});
 
   @override
   State<SeasonDetail> createState() => _SeasonDetailState();
@@ -73,7 +72,6 @@ class _SeasonDetailState extends State<SeasonDetail> with DetailPageMixin<TVSeas
         autoCollapse: true,
         text: Text(AppLocalizations.of(context)!.buttonShuffle),
       ),
-      buildWatchedAction(context, item, MediaType.season),
       buildFavoriteAction(context, item, MediaType.season),
       if (!kIsAndroidTV) buildCastAction(context, (device) => cast(item, device)),
       ActionDivider(),
@@ -92,7 +90,6 @@ class _SeasonDetailState extends State<SeasonDetail> with DetailPageMixin<TVSeas
           }
         }
       }),
-      if (widget.scrapper.id != null) buildHomeAction(context, ImdbUri(MediaType.season, widget.scrapper.id!, season: item.season).toUri()),
       ActionDivider(),
       buildDeleteAction(context, () => Api.tvSeasonDeleteById(item.id)),
     ];
@@ -125,7 +122,7 @@ class _SeasonDetailState extends State<SeasonDetail> with DetailPageMixin<TVSeas
       ...List.generate(season.episodes.length, (index) {
         final item = season.episodes[index];
         return FocusCard(
-            onTap: () => navigate(context, EpisodeDetail(tvEpisodeId: item.id, initialData: item, scrapper: widget.scrapper)),
+            onTap: () => navigate(context, EpisodeDetail(tvEpisodeId: item.id, initialData: item)),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -138,7 +135,6 @@ class _SeasonDetailState extends State<SeasonDetail> with DetailPageMixin<TVSeas
                               style: Theme.of(context).textTheme.titleMedium, overflow: TextOverflow.ellipsis)),
                       Gap.hSM,
                       if (item.downloaded) Icon(Icons.download_outlined, size: 14, color: Theme.of(context).colorScheme.secondary),
-                      if (item.watched) Icon(Icons.check_rounded, size: 14, color: Theme.of(context).colorScheme.secondary),
                       if (item.favorite) Icon(Icons.favorite_outline_rounded, size: 14, color: Theme.of(context).colorScheme.secondary),
                       Gap.hSM,
                       if (item.airDate != null) Text(item.airDate!.format(), style: Theme.of(context).textTheme.bodySmall),
@@ -172,7 +168,7 @@ class _SeasonDetailState extends State<SeasonDetail> with DetailPageMixin<TVSeas
 
   shufflePlay(TVSeason item) async {
     final playlist = item.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList()..shuffle();
-    await toPlayer(context, playlist, id: playlist[0].id, theme: item.themeColor, playerType: PlayerType.tv);
+    await toPlayer(context, playlist, id: playlist[0].id, playerType: PlayerType.tv);
     setState(() => refresh = true);
   }
 
@@ -181,7 +177,6 @@ class _SeasonDetailState extends State<SeasonDetail> with DetailPageMixin<TVSeas
       context,
       item.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList(),
       id: item.episodes[0].id,
-      theme: item.themeColor,
       playerType: PlayerType.tv,
     );
     setState(() => refresh = true);
@@ -193,7 +188,6 @@ class _SeasonDetailState extends State<SeasonDetail> with DetailPageMixin<TVSeas
       device,
       item.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList(),
       id: item.episodes[0].id,
-      theme: item.themeColor,
     );
     setState(() => refresh = true);
   }

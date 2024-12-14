@@ -44,9 +44,6 @@ class MediaBase {
   final String? title;
   final String? poster;
   final String? logo;
-  final String? backdrop;
-  final int? themeColor;
-  final bool watched;
   final bool favorite;
   final DateTime? airDate;
   final String? overview;
@@ -55,12 +52,9 @@ class MediaBase {
       : id = json['id'],
         title = json['title'],
         poster = json['poster'],
-        themeColor = json['themeColor'],
-        watched = json['watched'],
         favorite = json['favorite'],
         airDate = (json['airDate'] as String?)?.toDateTime(),
         logo = json['logo'],
-        backdrop = json['backdrop'],
         overview = json['overview'];
 }
 
@@ -105,7 +99,6 @@ class Movie extends Media {
   final String ext;
   final int fileSize;
   final List<SubtitleData> subtitles;
-  final Scrapper scrapper;
 
   Movie.fromJson(super.json)
       : voteAverage = json['voteAverage'],
@@ -122,7 +115,6 @@ class Movie extends Media {
         ext = json['ext'],
         fileSize = json['fileSize'],
         subtitles = (json['subtitles'] as JsonList).toSubtitles(),
-        scrapper = Scrapper.fromJson(json['scrapper']),
         super.fromJson();
 }
 
@@ -139,7 +131,6 @@ class TVSeries extends Media {
   final List<Keyword> keywords;
   final List<TVSeason> seasons;
   final TVEpisode? nextToPlay;
-  final Scrapper scrapper;
 
   TVSeries.fromJson(super.json)
       : voteAverage = json['voteAverage'],
@@ -154,7 +145,6 @@ class TVSeries extends Media {
         studios = (json['studios'] as JsonList).toStudios(),
         seasons = (json['seasons'] as JsonList).toSeasons(),
         nextToPlay = json['nextToPlay'] == null ? null : TVEpisode.fromJson(json['nextToPlay']),
-        scrapper = Scrapper.fromJson(json['scrapper']),
         super.fromJson();
 }
 
@@ -229,7 +219,6 @@ class Actor {
   final int? gender;
   final String? character;
   final String? profile;
-  final Scrapper scrapper;
 
   Actor.fromJson(Json json)
       : id = json['id'],
@@ -239,31 +228,26 @@ class Actor {
         profile = json['profile'],
         character = json['character'],
         adult = json['adult'],
-        scrapper = Scrapper.fromJson(json['scrapper']),
         super();
 }
 
 class Genre {
   final String name;
   final int id;
-  final Scrapper scrapper;
 
   Genre.fromJson(Json json)
       : id = json['id'],
         name = json['name'],
-        scrapper = Scrapper.fromJson(json['scrapper']),
         super();
 }
 
 class Keyword {
   final String name;
   final int id;
-  final Scrapper scrapper;
 
   Keyword.fromJson(Json json)
       : id = json['id'],
         name = json['name'],
-        scrapper = Scrapper.fromJson(json['scrapper']),
         super();
 }
 
@@ -272,14 +256,12 @@ class Studio {
   final String name;
   final String? country;
   final String? logo;
-  final Scrapper scrapper;
 
   Studio.fromJson(Json json)
       : id = json['id'],
         name = json['name'],
         logo = json['logo'],
         country = json['country'],
-        scrapper = Scrapper.fromJson(json['scrapper']),
         super();
 }
 

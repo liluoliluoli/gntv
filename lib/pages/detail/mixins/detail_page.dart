@@ -49,10 +49,7 @@ mixin DetailPageMixin<T extends MediaBase, S extends StatefulWidget> on State<S>
           builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
             final item = snapshot.requireData;
             favoriteChecked = item.favorite;
-            watchedChecked = item.watched;
             return _DetailTheme(
-              key: ValueKey(item.themeColor),
-              themeColor: item.themeColor,
               child: _DetailLayout(
                 controller: _controller,
                 item: item,
@@ -96,19 +93,6 @@ mixin DetailPageMixin<T extends MediaBase, S extends StatefulWidget> on State<S>
         }
       },
       icon: const Icon(Icons.airplay_rounded),
-    );
-  }
-
-  ActionButton buildWatchedAction(BuildContext context, T item, MediaType type) {
-    return ActionButton(
-      autoCollapse: true,
-      text: Text(watchedChecked ? AppLocalizations.of(context)!.buttonMarkNotPlayed : AppLocalizations.of(context)!.buttonMarkPlayed),
-      onPressed: () {
-        Api.markWatched(type, item.id, !item.watched);
-        refresh = true;
-        setState(() => watchedChecked = !watchedChecked);
-      },
-      icon: Icon(Icons.check_rounded, color: watchedChecked ? Colors.redAccent : null),
     );
   }
 
@@ -656,14 +640,6 @@ class _DetailFlexibleSpaceBarBackground<T extends MediaBase> extends StatelessWi
       fit: StackFit.expand,
       children: [
         Container(color: Theme.of(context).colorScheme.primary),
-        if (item.backdrop != null)
-          Stack(
-            fit: StackFit.expand,
-            children: [
-              AsyncImage(item.backdrop!, alignment: Alignment.topCenter),
-              Container(color: Colors.black54),
-            ],
-          ),
         if (item.logo != null)
           Positioned(
               top: isMobile ? 50 : 20,

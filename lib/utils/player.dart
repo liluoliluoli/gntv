@@ -7,7 +7,7 @@ import '../pages/player/common_player.dart';
 import '../pages/player/live_player.dart';
 import 'utils.dart';
 
-Future<void> toPlayer(BuildContext context, List<ExPlaylistItem> playlist, {int? id, int? theme, required PlayerType playerType}) async {
+Future<void> toPlayer(BuildContext context, List<ExPlaylistItem> playlist, {int? id, required PlayerType playerType}) async {
   assert(playlist.isNotEmpty);
   int index = playlist.indexWhere((element) => element.id == id);
   if (index == -1) {
@@ -17,7 +17,7 @@ Future<void> toPlayer(BuildContext context, List<ExPlaylistItem> playlist, {int?
   if (kIsAndroidTV && playerType == PlayerType.live) {
     await navigateTo(context, LivePlayerPage(playlist: playlist, index: index));
   } else {
-    await navigateTo(context, CommonPlayerPage(playlist: playlist, index: index, theme: theme, playerType: playerType));
+    await navigateTo(context, CommonPlayerPage(playlist: playlist, index: index, playerType: playerType));
   }
   setPreferredOrientations(false);
 }

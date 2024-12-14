@@ -67,7 +67,6 @@ class _MovieDetailState extends State<MovieDetail> with DetailPageMixin<Movie, M
         autoCollapse: true,
         text: Text(AppLocalizations.of(context)!.buttonTrailer),
       ),
-      buildWatchedAction(context, item, MediaType.movie),
       buildFavoriteAction(context, item, MediaType.movie),
       if (!kIsAndroidTV) buildCastAction(context, (device) => cast(item, device)),
       ActionDivider(),
@@ -117,7 +116,6 @@ class _MovieDetailState extends State<MovieDetail> with DetailPageMixin<Movie, M
           if (resp?.error == null) setState(() => refresh = true);
         },
       ),
-      if (item.scrapper.id != null) buildHomeAction(context, ImdbUri(MediaType.movie, item.scrapper.id!).toUri()),
       ActionDivider(),
       buildDeleteAction(context, () => Api.movieDeleteById(item.id)),
     ];
@@ -159,7 +157,6 @@ class _MovieDetailState extends State<MovieDetail> with DetailPageMixin<Movie, M
     await toPlayer(
       context,
       [FromMedia.fromMovie(item)],
-      theme: item.themeColor,
       playerType: PlayerType.movie,
     );
     setState(() => refresh = true);
@@ -170,7 +167,6 @@ class _MovieDetailState extends State<MovieDetail> with DetailPageMixin<Movie, M
       context,
       device,
       [FromMedia.fromMovie(item)],
-      theme: item.themeColor,
     );
     setState(() => refresh = true);
   }

@@ -63,7 +63,6 @@ class _TVDetailState extends State<TVDetail> with DetailPageMixin<TVSeries, TVDe
   List<ActionEntry> buildActions(BuildContext context, TVSeries item) {
     return [
       buildPlayAction(context, () => play(item)),
-      buildWatchedAction(context, item, MediaType.series),
       buildFavoriteAction(context, item, MediaType.series),
       if (!kIsAndroidTV) buildCastAction(context, (device) => cast(item, device)),
       ActionDivider(),
@@ -102,7 +101,6 @@ class _TVDetailState extends State<TVDetail> with DetailPageMixin<TVSeries, TVDe
           setState(() => refresh = true);
         }
       }),
-      if (item.scrapper.id != null) buildHomeAction(context, ImdbUri(MediaType.series, item.scrapper.id!).toUri()),
       ActionDivider(),
       buildDeleteAction(context, () => Api.tvSeriesDeleteById(item.id)),
     ];
@@ -132,7 +130,7 @@ class _TVDetailState extends State<TVDetail> with DetailPageMixin<TVSeries, TVDe
       if (item.seasons.isNotEmpty)
         SeasonsSection(
           seasons: item.seasons,
-          onTap: (season) => navigate(context, SeasonDetail(id: season.id, initialData: season, scrapper: item.scrapper)),
+          onTap: (season) => navigate(context, SeasonDetail(id: season.id, initialData: season)),
         ),
       if (item.actors.isNotEmpty) ActorsSection(actors: item.actors),
     ]);
@@ -158,7 +156,7 @@ class _TVDetailState extends State<TVDetail> with DetailPageMixin<TVSeries, TVDe
       final season = await Api.tvSeasonQueryById(res.seasonId);
       final playlist = season.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList();
       if (!mounted) return;
-      await toPlayer(context, playlist, id: res.id, theme: item.themeColor, playerType: PlayerType.tv);
+      await toPlayer(context, playlist, id: res.id, playerType: PlayerType.tv);
       setState(() => refresh = true);
     }
   }
@@ -169,7 +167,7 @@ class _TVDetailState extends State<TVDetail> with DetailPageMixin<TVSeries, TVDe
       final season = await Api.tvSeasonQueryById(res.seasonId);
       final playlist = season.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList();
       if (!mounted) return;
-      await toPlayerCast(context, device, playlist, id: res.id, theme: item.themeColor);
+      await toPlayerCast(context, device, playlist, id: res.id);
       setState(() => refresh = true);
     }
   }

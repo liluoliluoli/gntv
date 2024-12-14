@@ -20,14 +20,12 @@ import 'cast_adaptor.dart';
 class CommonPlayerPage extends StatefulWidget {
   final List<ExPlaylistItem> playlist;
   final int index;
-  final int? theme;
   final PlayerType playerType;
 
   const CommonPlayerPage({
     super.key,
     required this.playlist,
     required this.index,
-    this.theme,
     required this.playerType,
   });
 
@@ -75,7 +73,6 @@ class _CommonPlayerPageState extends State<CommonPlayerPage> {
       seekStep: Duration(seconds: userConfig.playerConfig.speed),
       extensionRendererMode: userConfig.playerConfig.mode,
       enableDecoderFallback: userConfig.playerConfig.enableDecoderFallback,
-      theme: widget.theme,
       cast: cast,
       actions: (context) => [
         if (controller.currentItem.canSkipIntro)
@@ -112,30 +109,6 @@ class _CommonPlayerPageState extends State<CommonPlayerPage> {
                 }
               }
             },
-          ),
-        if (controller.currentItem.downloadable)
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.buttonDownload),
-            onTap: () async {
-              final item = controller.currentItem;
-              if (!context.mounted) return;
-              switch (widget.playerType) {
-                case PlayerType.tv:
-                  showNotification(
-                    context,
-                    Api.downloadTaskCreate(item.id, MediaType.episode),
-                    successText: AppLocalizations.of(context)!.tipsForDownload,
-                  );
-                case PlayerType.movie:
-                  showNotification(
-                    context,
-                    Api.downloadTaskCreate(item.id, MediaType.movie),
-                    successText: AppLocalizations.of(context)!.tipsForDownload,
-                  );
-                case PlayerType.live:
-              }
-            },
-            trailing: const Badge(label: Text('Beta')),
           ),
       ],
       onMediaChange: (index, position, duration) {

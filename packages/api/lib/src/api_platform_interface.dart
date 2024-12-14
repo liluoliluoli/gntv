@@ -17,6 +17,7 @@ abstract class ApiPlatform extends PlatformInterface {
   static final Object _token = Object();
 
   static ApiPlatform _instance = ApiWeb();
+  // static ApiPlatform _instance = MethodChannelApi();
 
   static ApiPlatform get instance => _instance;
 
@@ -29,8 +30,8 @@ abstract class ApiPlatform extends PlatformInterface {
 
   final baseUrl = Uri(
     scheme: 'http',
-    host: '127.0.0.1',
-    port: 38916,
+    host: '192.168.10.129',
+    port: 8080,
   );
   static final StreamController<double?> streamController = ReplaySubject(maxSize: 1);
   final Stream<double?> progress$ = streamController.stream;
@@ -242,10 +243,12 @@ abstract class ApiPlatform extends PlatformInterface {
     return data!.map((e) => Movie.fromJson(e)).toList();
   }
 
+  // gnboot 更新电影元数据
   Future<void> movieMetadataUpdateById({required int id, required String title, DateTime? airDate}) {
     return client.post('/movie/metadata/update/id', data: {'id': id, 'title': title, 'airDate': airDate?.format()});
   }
 
+  // gnboot 更新字幕元数据
   Future<void> movieSubtitleUpdateById({required int id, required SubtitleData subtitle}) {
     return client.post('/movie/subtitle/update/id', data: {
       'id': id,
@@ -256,14 +259,17 @@ abstract class ApiPlatform extends PlatformInterface {
     });
   }
 
+  // gnboot 更新电影
   Future<void> movieUpdateById(int id, String title, String language, {String? year, int? index}) {
     return client.post('/movie/update/id', data: {'id': id, 'title': title, 'year': year, 'language': language, 'index': index});
   }
 
+  // gnboot 重命名电影
   Future<void> movieRenameById(int id) {
     return client.post('/movie/rename/id', data: {'id': id});
   }
 
+  // gnboot 删除电影
   Future<void> movieDeleteById(int id) {
     return client.delete('/movie/delete/id', data: {'id': id});
   }
@@ -273,76 +279,90 @@ abstract class ApiPlatform extends PlatformInterface {
   /// TV Start
   /// TV Series Start
   Future<List<TVSeries>> tvSeriesQueryAll([MediaSearchQuery? query]) async {
-    final data = await client.get<JsonList>('/tv/series/query/all', queryParameters: query?.toMap());
-    return data!.map((e) => TVSeries.fromJson(e)).toList();
+    final data = await client.post('/series/query/all', data: query?.toMap());
+    Map<String, dynamic> dataMap = data!;
+    List<dynamic> series = dataMap["list"]!;
+    return series!.map((e) => TVSeries.fromJson(e)).toList();
   }
 
   Future<List<TVSeries>> tvSeriesQueryByFilter(QueryType type, int id) async {
-    final data = await client.get<JsonList>('/tv/series/query/filter', queryParameters: {'id': id, 'type': type.name});
+    final data = await client.post<JsonList>('/series/query/filter', data: {'id': id, 'type': type.name});
     return data!.map((e) => TVSeries.fromJson(e)).toList();
   }
 
   Future<TVSeries> tvSeriesQueryById(int id) async {
-    final data = await client.get<Map<String, dynamic>>('/tv/series/query/id', queryParameters: {'id': id});
+    final data = await client.get<Map<String, dynamic>>('/series/query/id', queryParameters: {'id': id});
     return TVSeries.fromJson(data!);
   }
 
   Future<List<TVEpisode>> tvSeriesNextToPlayQueryAll() async {
-    final data = await client.get<JsonList>('/tv/series/nextToPlay/query/all');
-    return data!.map((e) => TVEpisode.fromJson(e)).toList();
+    final data = await client.post('/series/nextToPlay/query/all', data: {});
+    Map<String, dynamic> dataMap = data!;
+    List<dynamic> episodes = dataMap["list"]!;
+    List<TVEpisode> rs = episodes!.map((e) => TVEpisode.fromJson(e)).toList();
+    return rs;
   }
 
+  //gnboot
   Future<void> tvSeriesUpdateById(int id, String title, String language, {String? year, int? index}) {
-    return client.post('/tv/series/update/id', data: {'id': id, 'title': title, 'year': year, 'language': language, 'index': index});
+    return client.post('/series/update/id', data: {'id': id, 'title': title, 'year': year, 'language': language, 'index': index});
   }
 
+  //gnboot
   Future<void> tvSeriesSyncById(int id) {
-    return client.post('/tv/series/sync/id', data: {'id': id});
+    return client.post('/series/sync/id', data: {'id': id});
   }
 
+  //gnboot
   Future<void> tvSeriesMetadataUpdateById({required int id, required String title, DateTime? airDate}) {
-    return client.post('/tv/series/metadata/update/id', data: {'id': id, 'title': title, 'airDate': airDate?.format()});
+    return client.post('/series/metadata/update/id', data: {'id': id, 'title': title, 'airDate': airDate?.format()});
   }
 
+  //gnboot
   Future<void> tvSeriesRenameById(int id) {
-    return client.post('/tv/series/rename/id', data: {'id': id});
+    return client.post('/series/rename/id', data: {'id': id});
   }
 
+  //gnboot
   Future<void> tvSeriesDeleteById(int id) {
-    return client.delete('/tv/series/delete/id', data: {'id': id});
+    return client.delete('/series/delete/id', data: {'id': id});
   }
 
   /// TV Series End
 
   /// TV Season Start
   Future<TVSeason> tvSeasonQueryById(int id) async {
-    final data = await client.get<Map<String, dynamic>>('/tv/season/query/id', queryParameters: {'id': id});
+    final data = await client.get<Map<String, dynamic>>('/season/query/id', queryParameters: {'id': id});
     return TVSeason.fromJson(data!);
   }
 
+  //gnboot
   Future<int> tvSeasonNumberUpdate(TVSeason season, int seasonNum) async {
-    final data = await client.post('/tv/season/number/update', data: {'id': season.id, 'season': seasonNum});
+    final data = await client.post('/season/number/update', data: {'id': season.id, 'season': seasonNum});
     return data['id'];
   }
 
+  //gnboot
   Future<void> tvSeasonDeleteById(int id) {
-    return client.post('/tv/season/delete/id', data: {'id': id});
+    return client.post('/season/delete/id', data: {'id': id});
   }
 
   /// TV Season End
 
   /// TV Episode Start
   Future<TVEpisode> tvEpisodeQueryById(int id) async {
-    final data = await client.get<Map<String, dynamic>>('/tv/episode/query/id', queryParameters: {'id': id});
+    final data = await client.get<Map<String, dynamic>>('/episode/query/id', queryParameters: {'id': id});
     return TVEpisode.fromJson(data!);
   }
 
+  //gnboot
   Future<void> tvEpisodeMetadataUpdateById({required int id, required String title, required int episode}) {
-    return client.post('/tv/episode/metadata/update/id', data: {'id': id, 'title': title, 'episode': episode});
+    return client.post('/episode/metadata/update/id', data: {'id': id, 'title': title, 'episode': episode});
   }
 
+  //gnboot
   Future<void> tvEpisodeSubtitleUpdateById({required int id, required SubtitleData subtitle}) {
-    return client.post('/tv/episode/subtitle/update/id', data: {
+    return client.post('/episode/subtitle/update/id', data: {
       'id': id,
       'url': subtitle.url?.toString(),
       'title': subtitle.title,
@@ -351,8 +371,9 @@ abstract class ApiPlatform extends PlatformInterface {
     });
   }
 
+  //gnboot
   Future<void> tvEpisodeDeleteById(int id) {
-    return client.delete('/tv/episode/delete/id', data: {'id': id});
+    return client.delete('/episode/delete/id', data: {'id': id});
   }
 
   /// TV Episode End
@@ -415,7 +436,7 @@ abstract class ApiPlatform extends PlatformInterface {
     return client.post('/markWatched/update', data: {'id': id, 'marked': watched, 'type': type.name});
   }
 
-  Future<void> markFavorite(MediaType type, int id, bool favorite) {
+    Future<void> markFavorite(MediaType type, int id, bool favorite) {
     return client.post('/markFavorite/update', data: {'id': id, 'marked': favorite, 'type': type.name});
   }
 
@@ -442,7 +463,7 @@ abstract class ApiPlatform extends PlatformInterface {
     Version currentVersion, {
     required Future<void> Function(UpdateResp data, String url) needUpdate,
   }) {
-    return Future.value(false);
+    return Future.value(false);//待实现 todo
   }
 
   /// Miscellaneous End

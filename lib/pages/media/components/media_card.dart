@@ -78,8 +78,6 @@ class _MediaCardState extends State<MediaCard> {
                       size: 12,
                       color: Theme.of(context).colorScheme.error,
                     ),
-                  if (item.watched) const SizedBox(width: 4),
-                  if (item.watched) Icon(Icons.check, size: 12, color: Theme.of(context).colorScheme.primary),
                 ],
               )
             ],
@@ -101,7 +99,6 @@ class _MediaCardState extends State<MediaCard> {
             ? Banner(
                 message: AppLocalizations.of(context)!.tagNew,
                 location: BannerLocation.topEnd,
-                color: item.themeColor == null ? Theme.of(context).colorScheme.primary : Color(item.themeColor!).withAlpha(255),
                 child: child,
               )
             : child,

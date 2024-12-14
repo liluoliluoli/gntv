@@ -93,7 +93,6 @@ class _MovieListState extends State<MovieList> with MediaListMixin, NeedUpdateMi
                                               context,
                                               [FromMedia.fromMovie(movie)],
                                               id: item.id,
-                                              theme: item.themeColor,
                                               playerType: PlayerType.movie,
                                             );
                                             setState(() {});

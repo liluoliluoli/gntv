@@ -86,7 +86,6 @@ class _SystemSettingsPlayerHistoryState extends State<SystemSettingsPlayerHistor
                               await toPlayer(
                                 context,
                                 [FromMedia.fromMovie(movie)],
-                                theme: movie.themeColor,
                                 playerType: PlayerType.movie,
                               );
                               setState(() {});
@@ -99,7 +98,6 @@ class _SystemSettingsPlayerHistoryState extends State<SystemSettingsPlayerHistor
                                 season.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList(),
                                 playerType: PlayerType.tv,
                                 id: episode.id,
-                                theme: season.themeColor,
                               );
                               setState(() {});
                             default:

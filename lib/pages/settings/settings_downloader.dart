@@ -264,7 +264,6 @@ class SystemSettingsDownloader extends StatelessWidget {
         await toPlayer(
           context,
           [FromMedia.fromMovie(movie)],
-          theme: movie.themeColor,
           playerType: PlayerType.movie,
         );
       case MediaType.episode:
@@ -276,7 +275,6 @@ class SystemSettingsDownloader extends StatelessWidget {
           season.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList(),
           playerType: PlayerType.tv,
           id: episode.id,
-          theme: season.themeColor,
         );
       default:
     }

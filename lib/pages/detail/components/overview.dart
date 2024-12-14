@@ -42,7 +42,7 @@ class Overview<T extends MediaBase> extends StatelessWidget {
     return Theme(
       data: ThemeData(
           colorScheme:
-              ColorScheme.fromSeed(seedColor: item.themeColor != null ? Color(item.themeColor!) : Colors.blue, brightness: Theme.of(context).brightness)),
+              ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Theme.of(context).brightness)),
       child: Builder(builder: (context) {
         return DecoratedBox(
           decoration: BoxDecoration(

@@ -22,10 +22,9 @@ import 'utils/tmdb_uri.dart';
 
 class EpisodeDetail extends StatefulWidget {
   final int tvEpisodeId;
-  final Scrapper scrapper;
   final TVEpisode? initialData;
 
-  const EpisodeDetail({super.key, required this.tvEpisodeId, this.initialData, required this.scrapper});
+  const EpisodeDetail({super.key, required this.tvEpisodeId, this.initialData});
 
   @override
   State<EpisodeDetail> createState() => _EpisodeDetailState();
@@ -71,7 +70,6 @@ class _EpisodeDetailState extends State<EpisodeDetail> with DetailPageMixin<TVEp
   List<ActionEntry> buildActions(BuildContext context, TVEpisode item) {
     return [
       buildPlayAction(context, () => play(item)),
-      buildWatchedAction(context, item, MediaType.episode),
       buildFavoriteAction(context, item, MediaType.episode),
       if (!kIsAndroidTV) buildCastAction(context, (device) => cast(item, device)),
       ActionDivider(),
@@ -101,7 +99,7 @@ class _EpisodeDetailState extends State<EpisodeDetail> with DetailPageMixin<TVEp
       ActionButton(
         text: Text(AppLocalizations.of(context)!.buttonDownload),
         icon: const Icon(Icons.download_outlined),
-        trailing: const Badge(label: Text('Beta')),
+        trailing: const Badge(label: Text('Beta1')),
         collapsed: true,
         onPressed: () async {
           final resp =
@@ -109,8 +107,6 @@ class _EpisodeDetailState extends State<EpisodeDetail> with DetailPageMixin<TVEp
           if (resp?.error == null) setState(() => refresh = true);
         },
       ),
-      if (widget.scrapper.id != null)
-        buildHomeAction(context, ImdbUri(MediaType.episode, widget.scrapper.id!, season: item.season, episode: item.episode).toUri()),
       ActionDivider(),
       buildDeleteAction(context, () => Api.tvEpisodeDeleteById(item.id)),
     ];
@@ -144,7 +140,6 @@ class _EpisodeDetailState extends State<EpisodeDetail> with DetailPageMixin<TVEp
       season.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList(),
       playerType: PlayerType.tv,
       id: item.id,
-      theme: item.themeColor,
     );
     setState(() => refresh = true);
   }
@@ -157,7 +152,6 @@ class _EpisodeDetailState extends State<EpisodeDetail> with DetailPageMixin<TVEp
       device,
       season.episodes.map((episode) => FromMedia.fromEpisode(episode)).toList(),
       id: item.id,
-      theme: item.themeColor,
     );
     setState(() => refresh = true);
   }
