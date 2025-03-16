@@ -53,7 +53,7 @@ export default function PlayerScreen() {
                     style={styles.picker}
                 >
                     {Array.from({length: movieInfo.episodes}, (_, i) => (
-                        <Picker.Item label={`第 ${i + 1} 集`} value={i + 1} key={i}/>
+                        <Picker.Item label={`第 ${i + 1} 集`} value={'1'} key={i}/>
                     ))}
                 </Picker>
             </View>
